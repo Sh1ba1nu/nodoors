@@ -75,7 +75,7 @@ ItemSection:AddButton({
 })
 
 ItemSection:AddButton({
-	Name = "Crusifix on anything",
+	Name = "Crucifix on anything",
 	Color = Color3.fromRGB(255,255,255),
 	Callback = function()
 		_G.Uses = 100
