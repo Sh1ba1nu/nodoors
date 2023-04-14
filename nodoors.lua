@@ -1,14 +1,14 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
 OrionLib:MakeNotification({
-	Name = "ccdev",
-	Content = "a doors script",
+	Name = "nodoors",
+	Content = "made by ccdev and a guy",
 	Image = "rbxassetid://4483345998",
 	Time = 5
 })
 
 
-local Window = OrionLib:MakeWindow({Name = "ccdev", HidePremium = false, SaveConfig = true, ConfigFolder = "Orion"})
+local Window = OrionLib:MakeWindow({Name = "nodoors", HidePremium = false, SaveConfig = true, ConfigFolder = "Orion"})
 
 local PlayerTab = Window:MakeTab({
 	Name = "Player",
