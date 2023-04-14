@@ -108,9 +108,9 @@ MovementSection:AddToggle({
     Name = "noclip",
     Default = false,
     Callback = function(Value)
-        local Noclip = nil
-        local Clip = nil
-        local isNoclipEnabled = false
+        _G.Noclip = nil
+        _G.Clip = nil
+        _G.isNoclipEnabled = false
 
         function noclip()
             Clip = false
@@ -129,6 +129,7 @@ MovementSection:AddToggle({
         function clip()
             if Noclip then Noclip:Disconnect() end
             Clip = true
+            isNoclipEnabled = false
         end
 
         function toggleNoclip()
