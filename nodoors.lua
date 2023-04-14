@@ -109,8 +109,17 @@ MovementSection:AddToggle({
     Default = false,
     Callback = function(Value)
         local Noclip = nil
-        local Clip = true -- set the initial state to "enabled"
-
+        local Clip = true 
+        local floatName = "noClipFloat"
+        local floatPart = Instance.new('Part')
+        floatPart.Name = floatName
+        floatPart.Anchored = true
+        floatPart.CanCollide = false
+        floatPart.Transparency = 1
+        floatPart.Size = Vector3.new(4, 0.2, 4)
+        floatPart.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0, -3, 0)
+        floatPart.Parent = game.Workspace
+        
         function noclip()
             Clip = false
             local function Nocl()
@@ -130,8 +139,7 @@ MovementSection:AddToggle({
             if Noclip then Noclip:Disconnect() end
             Clip = true
         end
-
-        -- toggle the state based on the current value
+			
         if Value ~= Clip then
             Clip = Value
             if Clip then
@@ -142,6 +150,7 @@ MovementSection:AddToggle({
         end
     end
 })
+
 
 local SettingsTab = Window:MakeTab({
 	Name = "Settings",
