@@ -35,6 +35,13 @@ local ItemSection = FunTab:AddSection({
 	Name = "Items (not FE)"
 })
 
+PlayerSection:AddButton({
+	Name = "Revive",
+	Callback = function()
+		game:GetService("ReplicatedStorage")EntityInfo.Revive:FireServer()	
+	end
+})
+
 ItemSection:AddButton({
 	Name = "Shears",
 	Color = Color3.fromRGB(255,255,255),
