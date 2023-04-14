@@ -26,6 +26,11 @@ local PlayerSection = PlayerTab:AddSection({
 	Name = "Player"
 })
 
+local MovementSection = PlayerTab:AddSection({
+	Name = "Movment"
+})
+
+
 local ItemSection = FunTab:AddSection({
 	Name = "Items (not FE)"
 })
@@ -81,7 +86,7 @@ ItemSection:AddButton({
 	end
 })
 
-PlayerSection:AddSlider({
+MovementSection:AddSlider({
 	Name = "speed",
 	Min = 1,
 	Max = 21,
@@ -99,8 +104,39 @@ PlayerSection:AddSlider({
 	end    
 })
 
-PlayerSection:AddButton({
-	Name = "noclip"
+MovementSection:AddToggle({
+    Name = "noclip",
+    Default = false,
+    Callback = function(Value)
+        local Noclip = nil
+        local Clip = nil
+
+        function noclip()
+            Clip = false
+            local function Nocl()
+                if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+                    for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                        if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
+                            v.CanCollide = false
+                        end
+                    end
+                end
+                wait(0.21)
+            end
+            Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
+        end
+
+        function clip()
+            if Noclip then Noclip:Disconnect() end
+            Clip = true
+        end
+
+        if Value then
+            noclip()
+        else
+            clip()
+        end
+    end
 })
 
 local SettingsTab = Window:MakeTab({
