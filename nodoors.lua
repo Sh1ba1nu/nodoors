@@ -153,28 +153,7 @@ MovementSection:AddToggle({
             end
         end)
     end
-}) --not done yet
-MovementSection:AddToggle({
-    Name = "noclip",
-    Default = false,
-    Callback = function(Value)
-humanoid.WalkSpeed = 5
-
-local ray = Ray.new(character.HumanoidRootPart.Position, Vector3.new(0, -1, 0) * 5)
-local hit, position = workspace:FindPartOnRay(ray, character, false, true)
-if hit then
-    character:SetPrimaryPartCFrame(CFrame.new(position))
-end
-
-while true do
-    local direction = character.Humanoid.MoveDirection
-    if direction.Magnitude > 0 then
-        character:SetPrimaryPartCFrame(character.HumanoidRootPart.CFrame + direction.Unit * 3.8)
-    end
-    humanoid.WalkSpeed = 5
-    wait(0.3)
-end --may be removed 
-
+}) 
 
 local SettingsTab = Window:MakeTab({
 	Name = "Settings",
