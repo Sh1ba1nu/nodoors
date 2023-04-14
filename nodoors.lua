@@ -108,46 +108,51 @@ MovementSection:AddToggle({
     Name = "noclip",
     Default = false,
     Callback = function(Value)
-	local Noclip = nil
-	local Clip = nil
-	local isNoclipEnabled = false
+        local Noclip = nil
+        local Clip = nil
+        local isNoclipEnabled = false
 
-	function noclip()
-	    Clip = false
-	    local function Nocl()
-		if Clip == false and game.Players.LocalPlayer.Character ~= nil then
-		    for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-			if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
-			    v.CanCollide = false
-			end
-		    end
-		end
-	    end
-	    Noclip = game:GetService('RunService').Heartbeat:Connect(Nocl)
-	end
+        function noclip()
+            Clip = false
+            local function Nocl()
+                if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+                    for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                        if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
+                            v.CanCollide = false
+                        end
+                    end
+                end
+            end
+            Noclip = game:GetService('RunService').Heartbeat:Connect(Nocl)
+        end
 
-	function clip()
-	    if Noclip then Noclip:Disconnect() end
-	    Clip = true
-	end
+        function clip()
+            if Noclip then Noclip:Disconnect() end
+            Clip = true
+        end
 
-	function toggleNoclip()
-	    isNoclipEnabled = not isNoclipEnabled
-	    if isNoclipEnabled then
-		noclip()
-	    else
-		clip()
-	    end
-	end
+        function toggleNoclip()
+            isNoclipEnabled = not isNoclipEnabled
+            if isNoclipEnabled then
+                noclip()
+            else
+                clip()
+            end
+        end
 
-	game:GetService("UserInputService").InputBegan:Connect(function(input, isTyping)
-	    if not isTyping and input.KeyCode == Enum.KeyCode.N then
-		toggleNoclip()
-	    end
-	end)
+        if Value == 1 then
+            toggleNoclip()
+        elseif Value == 0 then
+            clip()
+        end
+
+        game:GetService("UserInputService").InputBegan:Connect(function(input, isTyping)
+            if not isTyping and input.KeyCode == Enum.KeyCode.N then
+                toggleNoclip()
+            end
+        end)
     end
 })
-
 
 local SettingsTab = Window:MakeTab({
 	Name = "Settings",
