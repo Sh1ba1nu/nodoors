@@ -52,7 +52,6 @@ VisualTab:AddToggle({
 	Name = "Full Bright",
 	Default = false,
     	Callback = function(Value)
-		pcall(function()
 		    local lighting = game:GetService("Lighting");
 		    lighting.Ambient = Color3.fromRGB(255, 255, 255);
 		    lighting.Brightness = 1;
@@ -77,7 +76,6 @@ VisualTab:AddToggle({
 				headlight.Range = 60;
 			    end;
 			end;
-		    end);
 		end)
 	end
 })
