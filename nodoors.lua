@@ -140,9 +140,9 @@ MovementSection:AddToggle({
             end
         end
 
-        if Value == 1 then
+        if Value == true then
             toggleNoclip()
-        elseif Value == 0 then
+        elseif Value == false then
             clip()
         end
 
