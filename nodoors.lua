@@ -108,46 +108,43 @@ MovementSection:AddToggle({
     Name = "noclip",
     Default = false,
     Callback = function(Value)
-        local Noclip = nil
-        local Clip = true 
-        local floatName = "noClipFloat"
-        local floatPart = Instance.new('Part')
-        floatPart.Name = floatName
-        floatPart.Anchored = true
-        floatPart.CanCollide = false
-        floatPart.Transparency = 1
-        floatPart.Size = Vector3.new(4, 0.2, 4)
-        floatPart.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0, -3, 0)
-        floatPart.Parent = game.Workspace
-        
-        function noclip()
-            Clip = false
-            local function Nocl()
-                if Clip == false and game.Players.LocalPlayer.Character ~= nil then
-                    for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-                        if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
-                            v.CanCollide = false
-                        end
-                    end
-                end
-                wait(0.21)
-            end
-            Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
-        end
+	local Noclip = nil
+	local Clip = nil
+	local isNoclipEnabled = false
 
-        function clip()
-            if Noclip then Noclip:Disconnect() end
-            Clip = true
-        end
-			
-        if Value ~= Clip then
-            Clip = Value
-            if Clip then
-                clip()
-            else
-                noclip()
-            end
-        end
+	function noclip()
+	    Clip = false
+	    local function Nocl()
+		if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+		    for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+			if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
+			    v.CanCollide = false
+			end
+		    end
+		end
+	    end
+	    Noclip = game:GetService('RunService').Heartbeat:Connect(Nocl)
+	end
+
+	function clip()
+	    if Noclip then Noclip:Disconnect() end
+	    Clip = true
+	end
+
+	function toggleNoclip()
+	    isNoclipEnabled = not isNoclipEnabled
+	    if isNoclipEnabled then
+		noclip()
+	    else
+		clip()
+	    end
+	end
+
+	game:GetService("UserInputService").InputBegan:Connect(function(input, isTyping)
+	    if not isTyping and input.KeyCode == Enum.KeyCode.N then
+		toggleNoclip()
+	    end
+	end)
     end
 })
 
