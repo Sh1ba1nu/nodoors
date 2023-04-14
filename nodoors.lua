@@ -108,9 +108,9 @@ MovementSection:AddToggle({
     Name = "noclip",
     Default = false,
     Callback = function(Value)
-        _G.Noclip = nil
-        _G.Clip = nil
-        _G.isNoclipEnabled = false
+        local Noclip = nil
+        local Clip = nil
+        local isNoclipEnabled = false
 
         function noclip()
             Clip = false
