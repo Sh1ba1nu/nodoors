@@ -109,7 +109,7 @@ MovementSection:AddToggle({
     Default = false,
     Callback = function(Value)
         local Noclip = nil
-        local Clip = nil
+        local Clip = true -- set the initial state to "enabled"
 
         function noclip()
             Clip = false
@@ -131,10 +131,14 @@ MovementSection:AddToggle({
             Clip = true
         end
 
-        if Value then
-            noclip()
-        else
-            clip()
+        -- toggle the state based on the current value
+        if Value ~= Clip then
+            Clip = Value
+            if Clip then
+                clip()
+            else
+                noclip()
+            end
         end
     end
 })
