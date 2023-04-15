@@ -9,9 +9,11 @@ local FarmingSection = GeneralTab:CreateSection({Name = "Farming"})
 local MovementSection = GeneralTab:CreateSection({Name = "Movment"})
 local ItemSection = FunTab:CreateSection({Name = "Items (not FE)"})
 local MiscSection = GeneralTab:CreateSection({Name = "Misc",Side = "Right"})
+local VisualSection = GeneralTab:CreateSection({Name = "Visual"})
 
 _G.walktp = false
 _G.noclip = false
+_G.esp = false
 
 MovementSection:AddSlider({
 	Name = "speed",
@@ -29,6 +31,73 @@ MovementSection:AddSlider({
 		end)
 		Player.Character.Humanoid.WalkSpeed = getgenv().WalkSpeedValue;
 	end    
+})
+
+VisualSection:AddToggle({
+    Name = "Door esp",
+    Callback = function(Value)
+        _G.esp = Value
+        spawn(function()
+            local billboardedRooms = {}
+            while _G.esp == true do
+				wait(0.25)
+                for _, model in ipairs(game.workspace.CurrentRooms:GetChildren()) do
+                    if not billboardedRooms[model] then -- Check if the room does not already have the billboard
+                        for _, v in ipairs(model:GetDescendants()) do
+                            if v.Name == "RoomExit" and v:IsA("BasePart") then
+                                local gui = Instance.new("BillboardGui", v)
+                                gui.Name = "ElectricPPPGUI"
+                                gui.Size = UDim2.new(10, 0, 10, 0)
+                                gui.AlwaysOnTop = true
+                                gui.LightInfluence = 0
+
+                                local frame = Instance.new("Frame", gui)
+                                frame.Size = UDim2.new(0.5, 0, 0.5, 0)
+                                frame.BackgroundTransparency = 1
+                                frame.BorderSizePixel = 0
+                                frame.BackgroundColor3 = Color3.new(0, 255, 0)
+
+                                local label = Instance.new("TextLabel", frame)
+                                label.Size = UDim2.new(2, 0, 2, 0)
+                                label.BorderSizePixel = 0
+                                label.TextSize = 20
+
+                                -- Get the index of the model that contains this RoomExit
+                                local index = table.find(game.workspace.CurrentRooms:GetChildren(), model)
+                                if index then
+                                    label.Text = "door " .. tostring(index)
+                                else
+                                    label.Text = "door"
+                                end
+
+                                label.BackgroundTransparency = 1
+                                billboardedRooms[model] = true -- Mark the room as billboarded
+                            end
+                        end
+                    end
+                end
+            end     
+        end)
+    end
+})
+
+VisualSection:AddButton({
+    Name = "clear esp",
+    Callback = function()
+		local function deleteDescendants(obj)
+		for _, descendant in pairs(obj:GetDescendants()) do
+			descendant:Destroy()
+		end
+	end
+
+	local currentRooms = game.workspace.CurrentRooms
+	for _, descendant in pairs(currentRooms:GetDescendants()) do
+		if descendant.Name == "RoomExit" then
+			deleteDescendants(descendant)
+			descendant:Destroy()
+		end
+	end
+	end
 })
 
 MovementSection:AddToggle({
