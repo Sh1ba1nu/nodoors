@@ -1,82 +1,101 @@
 local library = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)()
+local Wait = library.subs.Wait
 
-OrionLib:MakeNotification({
-	Name = "NovaDoors",
-	Content = "Made By shiba inu#2346 and CCdev#8836",
-	Image = "rbxassetid://4483345998",
-	Time = 5
+local nod = library:CreateWindow({Name = "NovaDoors", Themeable = {Info = "Made By CCdev#8836 & shiba inu#2346"}})
+
+local GeneralTab = nod:CreateTab({Name = "General"})
+local FunTab = nod:CreateTab({Name = "Fun"})
+local FarmingSection = GeneralTab:CreateSection({Name = "Farming"})
+local MovementSection = GeneralTab:CreateSection({Name = "Movment"})
+local ItemSection = FunTab:CreateSection({Name = "Items (not FE)"})
+local MiscSection = GeneralTab:CreateSection({Name = "Misc",Side = "Right"})
+
+_G.walktp = false
+_G.noclip = false
+
+MovementSection:AddSlider({
+	Name = "speed",
+	Min = 1,
+	Max = 21,
+	Default = 16,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "speed",
+	Callback = function(Value)
+		getgenv().WalkSpeedValue = Value;
+		local Player = game:service'Players'.LocalPlayer;
+			Player.Character.Humanoid:GetPropertyChangedSignal'WalkSpeed':Connect(function()
+			Player.Character.Humanoid.WalkSpeed = getgenv().WalkSpeedValue;
+		end)
+		Player.Character.Humanoid.WalkSpeed = getgenv().WalkSpeedValue;
+	end    
 })
 
+MovementSection:AddToggle({
+	Name = "tpwalk",
+	Callback = function(Value)
+		_G.walktp = Value
+		spawn(function()
+		local player = game.Players.LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+		local humanoid = character:WaitForChild("Humanoid")
+		print(_G.walktp)
+		while _G.walktp == true do
+			local direction = character.Humanoid.MoveDirection
+			if direction.Magnitude > 0 then
+				local newPosition = character.HumanoidRootPart.Position + direction.Unit * 3.8
+				if _G.walktp then
+					player.Character:SetPrimaryPartCFrame(CFrame.new(newPosition))
+				else
+					player.Character:SetPrimaryPartCFrame(CFrame.new(newPosition, newPosition + Vector3.new(0, -1, 0)))
+				end
+			end
+			wait(0.2)
 
-local Window = OrionLib:MakeWindow({Name = "NovaDoors", HidePremium = false, SaveConfig = true, ConfigFolder = "Orion"})
-
-local PlayerTab = Window:MakeTab({
-	Name = "Player",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+			local ray = Ray.new(character.HumanoidRootPart.Position, Vector3.new(0, -1, 0))
+			local hit, position = workspace:FindPartOnRay(ray, character)
+			if hit then
+				if _G.walktp then
+					player.Character:SetPrimaryPartCFrame(CFrame.new(position))
+				else
+					player.Character:SetPrimaryPartCFrame(CFrame.new(position, position + Vector3.new(0, 1, 0)))
+				end
+			end
+		end
+	end)
+end    
 })
 
-local FunTab = Window:MakeTab({
-	Name = "Fun",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+MovementSection:AddToggle({
+    Name = "noclip",
+    Parent = MovementSection,
+    Callback = function(Value)
+        _G.noclip = Value
+        spawn(function()
+            local character = game.Players.LocalPlayer.Character
+
+            while true do
+                for i,v in pairs(character:GetDescendants()) do
+                    pcall(function()
+                        if v:IsA("BasePart") then
+                            if _G.noclip == true then
+                                v.CanCollide = false
+                            else
+                                wait()
+                            end
+                        end
+                    end)
+                end
+                task.wait()
+            end
+        end)
+    end
 })
 
-local VisualTab = Window:MakeTab({
-	Name = "Visual",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local PlayerSection = PlayerTab:AddSection({
-	Name = "Player"
-})
-
-local MovementSection = PlayerTab:AddSection({
-	Name = "Movment"
-})
-
-
-local ItemSection = FunTab:AddSection({
-	Name = "Items (not FE)"
-})
-
-PlayerSection:AddButton({
+MiscSection:AddButton({
 	Name = "Revive",
 	Callback = function()
 		game:GetService("ReplicatedStorage")EntityInfo.Revive:FireServer()	
-	end
-})
-
-VisualTab:AddToggle({
-	Name = "Full Bright",
-	Default = false,
-    	Callback = function(Value)
-		    local lighting = game:GetService("Lighting");
-		    lighting.Ambient = Color3.fromRGB(255, 255, 255);
-		    lighting.Brightness = 1;
-		    lighting.FogEnd = 1e10;
-		    for i, v in pairs(lighting:GetDescendants()) do
-			if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("SunRaysEffect") then
-			    v.Enabled = false;
-			end;
-		    end;
-		    lighting.Changed:Connect(function()
-			lighting.Ambient = Color3.fromRGB(255, 255, 255);
-			lighting.Brightness = 1;
-			lighting.FogEnd = 1e10;
-		    end);
-		    spawn(function()
-			local character = game:GetService("Players").LocalPlayer.Character;
-			while wait() do
-			    repeat wait() until character ~= nil;
-			    if not character.HumanoidRootPart:FindFirstChildWhichIsA("PointLight") then
-				local headlight = Instance.new("PointLight", character.HumanoidRootPart);
-				headlight.Brightness = 1;
-				headlight.Range = 60;
-			    end;
-			end;
-		end)
 	end
 })
 
@@ -130,91 +149,3 @@ ItemSection:AddButton({
 		loadstring(game:HttpGet('https://raw.githubusercontent.com/PenguinManiack/Crucifix/main/Crucifix.lua'))()
 	end
 })
-
-MovementSection:AddSlider({
-	Name = "speed",
-	Min = 1,
-	Max = 21,
-	Default = 16,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "speed",
-	Callback = function(Value)
-		getgenv().WalkSpeedValue = Value;
-		local Player = game:service'Players'.LocalPlayer;
-			Player.Character.Humanoid:GetPropertyChangedSignal'WalkSpeed':Connect(function()
-			Player.Character.Humanoid.WalkSpeed = getgenv().WalkSpeedValue;
-		end)
-		Player.Character.Humanoid.WalkSpeed = getgenv().WalkSpeedValue;
-	end    
-})
-
-MovementSection:AddToggle({
-    Name = "noclip",
-    Default = false,
-    Callback = function(Value)
-        local Noclip = nil
-        local Clip = nil
-        local isNoclipEnabled = false
-
-        function noclip()
-            Clip = false
-            local function Nocl()
-                if Clip == false and game.Players.LocalPlayer.Character ~= nil then
-                    for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-                        if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
-                            v.CanCollide = false
-                        end
-                    end
-                end
-            end
-            Noclip = game:GetService('RunService').Heartbeat:Connect(Nocl)
-        end
-
-        function clip()
-            if Noclip then Noclip:Disconnect() end
-            Clip = true
-            isNoclipEnabled = false
-        end
-
-        function toggleNoclip()
-            isNoclipEnabled = not isNoclipEnabled
-            if isNoclipEnabled then
-                noclip()
-            else
-                clip()
-            end
-        end
-
-        if Value == true then
-            toggleNoclip()
-        elseif Value == false then
-            clip()
-        end
-
-        game:GetService("UserInputService").InputBegan:Connect(function(input, isTyping)
-            if not isTyping and input.KeyCode == Enum.KeyCode.N then
-                toggleNoclip()
-            end
-        end)
-    end
-}) 
-
-local SettingsTab = Window:MakeTab({
-	Name = "Settings",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local SettingsSection = SettingsTab:AddSection({
-	Name = "Settings"
-})
-
-SettingsSection:AddButton({
-	Name = "Destroy UI",
-	Callback = function()
-        OrionLib:Destroy()
-  	end    
-})
-
-OrionLib:Init()
