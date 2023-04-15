@@ -40,13 +40,13 @@ VisualSection:AddToggle({
         spawn(function()
             local billboardedRooms = {}
             while _G.esp == true do
-				wait(0.25)
+                wait(0.25)
                 for _, model in ipairs(game.workspace.CurrentRooms:GetChildren()) do
                     if not billboardedRooms[model] then -- Check if the room does not already have the billboard
                         for _, v in ipairs(model:GetDescendants()) do
                             if v.Name == "RoomExit" and v:IsA("BasePart") then
                                 local gui = Instance.new("BillboardGui", v)
-                                gui.Name = "ElectricPPPGUI"
+                                gui.Name = "esp"
                                 gui.Size = UDim2.new(10, 0, 10, 0)
                                 gui.AlwaysOnTop = true
                                 gui.LightInfluence = 0
@@ -63,7 +63,7 @@ VisualSection:AddToggle({
                                 label.TextSize = 20
 
                                 -- Get the index of the model that contains this RoomExit
-                                local index = table.find(game.workspace.CurrentRooms:GetChildren(), model)
+                                local index = #game.workspace.CurrentRooms:GetChildren()
                                 if index then
                                     label.Text = "door " .. tostring(index)
                                 else
