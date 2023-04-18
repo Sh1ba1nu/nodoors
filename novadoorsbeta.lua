@@ -63,8 +63,15 @@ VisualSection:AddToggle({
                                 label.Size = UDim2.new(2, 0, 2, 0)
                                 label.BorderSizePixel = 0
                                 label.TextSize = 20
-                                local distance = math.floor((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude)
-                                label.Text = "Distance: " .. tostring(distance) .. " studs"
+                                
+                                -- update distance every 0.5 seconds
+                                spawn(function()
+                                    while gui.Parent == v do
+                                        local distance = math.floor((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude)
+                                        label.Text = "Distance: " .. tostring(distance) .. " studs"
+                                        wait(0.5)
+                                    end
+                                end)
 
                                 label.BackgroundTransparency = 1
                                 billboardedRooms[model] = true
@@ -80,20 +87,19 @@ VisualSection:AddToggle({
 VisualSection:AddButton({
     Name = "clear esp",
     Callback = function()
-		local function deleteDescendants(obj)
-		for _, descendant in pairs(obj:GetDescendants()) do
-			descendant:Destroy()
-		end
-	end
+        local function deleteDescendants(obj)
+            for _, descendant in pairs(obj:GetDescendants()) do
+                descendant:Destroy()
+            end
+        end
 
-	local currentRooms = game.workspace.CurrentRooms
-	for _, descendant in pairs(currentRooms:GetDescendants()) do
-		if descendant.Name == "RoomExit" then
-			deleteDescendants(descendant)
-			descendant:Destroy()
-		end
-	end
-	end
+        local currentRooms = game.workspace.CurrentRooms
+        for _, descendant in pairs(currentRooms:GetDescendants()) do
+            if descendant.Name == "RoomExit" then
+                deleteDescendants(descendant)
+            end
+        end
+    end
 })
 
 MovementSection:AddToggle({
