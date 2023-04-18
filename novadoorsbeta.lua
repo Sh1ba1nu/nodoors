@@ -42,9 +42,9 @@ VisualSection:AddToggle({
         spawn(function()
             local billboardedRooms = {}
             while _G.esp == true do
-                wait(0.01)
+                wait(0.25)
                 for _, model in ipairs(game.workspace.CurrentRooms:GetChildren()) do
-                    if not billboardedRooms[model] then 
+                    if not billboardedRooms[model] then -- Check if the room does not already have the billboard
                         for _, v in ipairs(model:GetDescendants()) do
                             if v.Name == "RoomExit" and v:IsA("BasePart") then
                                 local gui = Instance.new("BillboardGui", v)
@@ -57,17 +57,17 @@ VisualSection:AddToggle({
                                 frame.Size = UDim2.new(0.5, 0, 0.5, 0)
                                 frame.BackgroundTransparency = 1
                                 frame.BorderSizePixel = 0
+                                frame.BackgroundColor3 = Color3.new(0, 255, 0)
 
                                 local label = Instance.new("TextLabel", frame)
                                 label.Size = UDim2.new(2, 0, 2, 0)
-                                label.BorderSizePixel = 0
+                                label.BorderSizePixel = 0.25
                                 label.TextSize = 20
-				frame.TextColor3 = Color3.new(0, 255, 0)
                                 
                                 spawn(function()
                                     while gui.Parent == v do
                                         local distance = math.floor((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude)
-                                        label.Text = "door [ " .. tostring(distance) .. " ]"
+                                        label.Text = "Door [ " .. tostring(distance) .. " ]"
                                         wait(0.01)
                                     end
                                 end)
@@ -109,7 +109,6 @@ MovementSection:AddToggle({
 		local player = game.Players.LocalPlayer
 		local character = player.Character or player.CharacterAdded:Wait()
 		local humanoid = character:WaitForChild("Humanoid")
-		print(_G.walktp)
 		while _G.walktp == true do
 			local direction = character.Humanoid.MoveDirection
 			if direction.Magnitude > 0 then
