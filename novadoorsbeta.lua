@@ -170,7 +170,7 @@ MiscSection:AddToggle({
         _G.fastuse = Value
         spawn(function()
             while true do
-                if _G.fastuse then
+                if _G.fastuse == true then
                     print("Fast use is ON")
                     for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
                         if room:FindFirstChild("Door") then
