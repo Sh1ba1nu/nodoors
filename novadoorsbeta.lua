@@ -93,7 +93,7 @@ VisualSection:AddToggle({
             local billboardedRooms = {}
             while _G.leveresp == true do
                 wait(0.25)
-                for _, model in ipairs(game.workspace.CurrentRooms.Assets:GetChildren()) do
+                for _, model in ipairs(game.workspace.CurrentRooms:GetChildren(Assets)) do
                     if not billboardedRooms[model] then
                         for _, v in ipairs(model:GetDescendants()) do
                             if v.Name == "LeverForGate" and v:IsA("BasePart") then
