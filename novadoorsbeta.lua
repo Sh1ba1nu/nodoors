@@ -61,8 +61,9 @@ VisualSection:AddToggle({
 
                                 local label = Instance.new("TextLabel", frame)
                                 label.Size = UDim2.new(2, 0, 2, 0)
-                                label.BorderSizePixel = 0.25
+                                label.BorderSizePixel = 1
                                 label.TextSize = 20
+				label.TextColor3 = Color3.new(0, 255, 0)
                                 
                                 spawn(function()
                                     while gui.Parent == v do
