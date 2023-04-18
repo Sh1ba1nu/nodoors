@@ -85,8 +85,9 @@ VisualSection:AddToggle({
     end
 })
 
+
 VisualSection:AddToggle({   
-    Name = "Lever esp",
+    Name = "Lever esp (not working)",
     Callback = function(Value)
         _G.leveresp = Value
         spawn(function()
@@ -136,6 +137,8 @@ VisualSection:AddToggle({
         end)
     end
 })
+
+
 
 
 VisualSection:AddButton({
