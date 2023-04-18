@@ -14,6 +14,8 @@ local VisualSection = GeneralTab:CreateSection({Name = "Visual"})
 _G.walktp = false
 _G.noclip = false
 _G.esp = false
+_G.fastuse = false
+
 
 MovementSection:AddSlider({
 	Name = "speed",
@@ -61,17 +63,11 @@ VisualSection:AddToggle({
                                 label.Size = UDim2.new(2, 0, 2, 0)
                                 label.BorderSizePixel = 0
                                 label.TextSize = 20
-
-                                -- Get the index of the model that contains this RoomExit
-                                local index = #game.workspace.CurrentRooms:GetChildren()
-                                if index then
-                                    label.Text = "door " .. tostring(index)
-                                else
-                                    label.Text = "door"
-                                end
+                                local distance = math.floor((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude)
+                                label.Text = "Distance: " .. tostring(distance) .. " studs"
 
                                 label.BackgroundTransparency = 1
-                                billboardedRooms[model] = true -- Mark the room as billboarded
+                                billboardedRooms[model] = true
                             end
                         end
                     end
@@ -166,6 +162,30 @@ MiscSection:AddButton({
 	Callback = function()
 		game:GetService("ReplicatedStorage")EntityInfo.Revive:FireServer()	
 	end
+})
+
+MiscSection:AddToggle({
+    Name = "fast use",
+    Callback = function(Value)
+        _G.fastuse = Value
+        spawn(function()
+            while _G.fastuse == true do
+                for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
+                    if room:FindFirstChild("Door") then
+                        local door = room.Door
+
+                        if door:FindFirstChild("Lock") then
+                            if _G.fastuse then
+                                door.Lock.UnlockPrompt.HoldDuration = 0
+                            else
+                                door.Lock.UnlockPrompt.HoldDuration = 2
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
 })
 
 ItemSection:AddButton({
