@@ -170,6 +170,7 @@ MiscSection:AddToggle({
         _G.fastuse = Value
         spawn(function()
             while _G.fastuse == true do
+		wait(0.5)
                 for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
                     if room:FindFirstChild("Door") then
                         local door = room.Door
