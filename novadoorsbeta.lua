@@ -169,25 +169,36 @@ MiscSection:AddToggle({
     Callback = function(Value)
         _G.fastuse = Value
         spawn(function()
-            while _G.fastuse == true do
-                wait(0.5)
-                for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
-                    if room:FindFirstChild("Door") then
-                        local door = room.Door
+            while true do
+                if _G.fastuse then
+                    print("Fast use is ON")
+                    for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
+                        if room:FindFirstChild("Door") then
+                            local door = room.Door
 
-                        if door:FindFirstChild("Lock") and door.Lock:FindFirstChild("UnlockPrompt") and door.Lock.UnlockPrompt:FindFirstChild("HoldDuration") then
-                            if _G.fastuse then
+                            if door:FindFirstChild("Lock") then
                                 door.Lock.UnlockPrompt.HoldDuration = 0
-                            else
+                            end
+                        end
+                    end
+                else
+                    print("Fast use is OFF")
+                    for _, room in pairs(workspace.CurrentRooms:GetChildren()) do
+                        if room:FindFirstChild("Door") then
+                            local door = room.Door
+
+                            if door:FindFirstChild("Lock") then
                                 door.Lock.UnlockPrompt.HoldDuration = 2
                             end
                         end
                     end
                 end
+                wait(0.5)
             end
         end)
     end
 })
+
 
 ItemSection:AddButton({
 	Name = "Crucifix on anything",
