@@ -13,7 +13,8 @@ local VisualSection = GeneralTab:CreateSection({Name = "Visual"})
 
 _G.walktp = false
 _G.noclip = false
-_G.esp = false
+_G.dooresp = false
+_G.leveresp = false
 _G.fastuse = false
 
 
@@ -38,17 +39,17 @@ MovementSection:AddSlider({
 VisualSection:AddToggle({
     Name = "Door esp",
     Callback = function(Value)
-        _G.esp = Value
+        _G.dooresp = Value
         spawn(function()
             local billboardedRooms = {}
-            while _G.esp == true do
+            while _G.dooresp == true do
                 wait(0.25)
                 for _, model in ipairs(game.workspace.CurrentRooms:GetChildren()) do
-                    if not billboardedRooms[model] then -- Check if the room does not already have the billboard
+                    if not billboardedRooms[model] then
                         for _, v in ipairs(model:GetDescendants()) do
                             if v.Name == "RoomExit" and v:IsA("BasePart") then
                                 local gui = Instance.new("BillboardGui", v)
-                                gui.Name = "esp"
+                                gui.Name = "dooresp"
                                 gui.Size = UDim2.new(10, 0, 10, 0)
                                 gui.AlwaysOnTop = true
                                 gui.LightInfluence = 0
@@ -84,6 +85,55 @@ VisualSection:AddToggle({
     end
 })
 
+VisualSection:AddToggle({   
+    Name = "Lever esp",
+    Callback = function(Value)
+        _G.leveresp = Value
+        spawn(function()
+            local billboardedRooms = {}
+            while _G.leveresp == true do
+                wait(0.25)
+                for _, model in ipairs(game.workspace.CurrentRooms.Assets:GetChildren()) do
+                    if not billboardedRooms[model] then
+                        for _, v in ipairs(model:GetDescendants()) do
+                            if v.Name == "LeverForGate" and v:IsA("BasePart") then
+                                local gui = Instance.new("BillboardGui", v)
+                                gui.Name = "leveresp"
+                                gui.Size = UDim2.new(10, 0, 10, 0)
+                                gui.AlwaysOnTop = true
+                                gui.LightInfluence = 0
+
+                                local frame = Instance.new("Frame", gui)
+                                frame.Size = UDim2.new(0.5, 0, 0.5, 0)
+                                frame.BackgroundTransparency = 1
+                                frame.BorderSizePixel = 0
+                                frame.BackgroundColor3 = Color3.new(0, 255, 0)
+
+                                local label = Instance.new("TextLabel", frame)
+                                label.Size = UDim2.new(2, 0, 2, 0)
+                                label.BorderSizePixel = 1
+                                label.TextSize = 20
+				label.TextColor3 = Color3.new(0, 255, 0)
+                                
+                                spawn(function()
+                                    while gui.Parent == v do
+                                        local distance = math.floor((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude)
+                                        label.Text = "Lever [ " .. tostring(distance) .. " ]"
+                                        wait(0.01)
+                                    end
+                                end)
+
+                                label.BackgroundTransparency = 1
+                                billboardedRooms[model] = true
+                            end
+                        end
+                    end
+                end
+            end     
+        end)
+    end
+})
+
 VisualSection:AddButton({
     Name = "clear esp",
     Callback = function()
@@ -96,6 +146,11 @@ VisualSection:AddButton({
         local currentRooms = game.workspace.CurrentRooms
         for _, descendant in pairs(currentRooms:GetDescendants()) do
             if descendant.Name == "RoomExit" then
+                deleteDescendants(descendant)
+            end
+        end
+        for _, descendant in pairs(currentRooms.Assets:GetDescendants()) do
+            if descendant.Name == "LeverForGate" then
                 deleteDescendants(descendant)
             end
         end
