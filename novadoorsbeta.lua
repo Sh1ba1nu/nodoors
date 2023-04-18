@@ -42,9 +42,9 @@ VisualSection:AddToggle({
         spawn(function()
             local billboardedRooms = {}
             while _G.esp == true do
-                wait(0.25)
+                wait(0.01)
                 for _, model in ipairs(game.workspace.CurrentRooms:GetChildren()) do
-                    if not billboardedRooms[model] then -- Check if the room does not already have the billboard
+                    if not billboardedRooms[model] then 
                         for _, v in ipairs(model:GetDescendants()) do
                             if v.Name == "RoomExit" and v:IsA("BasePart") then
                                 local gui = Instance.new("BillboardGui", v)
@@ -63,11 +63,12 @@ VisualSection:AddToggle({
                                 label.Size = UDim2.new(2, 0, 2, 0)
                                 label.BorderSizePixel = 0
                                 label.TextSize = 20
+				label.BackgroundColor3 = Color3.new(0, 255, 0)
                                 
                                 spawn(function()
                                     while gui.Parent == v do
                                         local distance = math.floor((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude)
-                                        label.Text = "Distance: " .. tostring(distance) .. " studs"
+                                        label.Text = " [ " .. tostring(distance) .. " ]"
                                         wait(0.01)
                                     end
                                 end)
