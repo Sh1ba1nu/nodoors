@@ -1,4 +1,4 @@
-local userIds = {4325004768}
+local userIds = {43250047681}
 
 local player = game.Players.LocalPlayer
 local playerId = player.UserId
