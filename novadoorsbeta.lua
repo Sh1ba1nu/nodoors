@@ -85,7 +85,7 @@ VisualSection:AddToggle({
     end
 })
 
-VisualSection:AddToggle({
+VisualSection:AddToggle({   
     Name = "Lever esp",
     Callback = function(Value)
         _G.leveresp = Value
@@ -95,9 +95,9 @@ VisualSection:AddToggle({
                 wait(0.25)
                 for _, model in ipairs(game.workspace.CurrentRooms:GetChildren()) do
                     if not billboardedRooms[model] then
-                        local assets = model:FindFirstChild("Assets")
-                        if assets then
-                            for _, v in ipairs(assets:GetDescendants()) do
+                        local assetsFolder = model:FindFirstChild("Assets")
+                        if assetsFolder then
+                            for _, v in ipairs(assetsFolder:GetDescendants()) do
                                 if v.Name == "LeverForGate" and v:IsA("BasePart") then
                                     local gui = Instance.new("BillboardGui", v)
                                     gui.Name = "leveresp"
@@ -116,7 +116,7 @@ VisualSection:AddToggle({
                                     label.BorderSizePixel = 1
                                     label.TextSize = 20
                                     label.TextColor3 = Color3.new(0, 255, 0)
-
+                                    
                                     spawn(function()
                                         while gui.Parent == v do
                                             local distance = math.floor((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude)
