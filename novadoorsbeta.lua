@@ -64,12 +64,11 @@ VisualSection:AddToggle({
                                 label.BorderSizePixel = 0
                                 label.TextSize = 20
                                 
-                                -- update distance every 0.5 seconds
                                 spawn(function()
                                     while gui.Parent == v do
                                         local distance = math.floor((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude)
                                         label.Text = "Distance: " .. tostring(distance) .. " studs"
-                                        wait(0.5)
+                                        wait(0.01)
                                     end
                                 end)
 
