@@ -1,9 +1,4 @@
-local userIds = {4325004768, 4120866028}
 
-local player = game.Players.LocalPlayer
-local playerId = player.UserId
-
-if table.find(userIds, playerId) then
 	local library = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)()
 	local Wait = library.subs.Wait
 
@@ -321,4 +316,3 @@ if table.find(userIds, playerId) then
 			end)
 		end
 	})
-end
